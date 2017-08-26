@@ -90,18 +90,18 @@
 
 
 
-<meta name="description" content="docker-compose.yml 配置文件（约定的 docker-compose 配置文件的名字）version: &amp;quot;2.0&amp;quot; services:     web:       image: ubuntu:16.04       ports:         - &amp;quot;80:80&amp;quot;         - &amp;quot;443:443&amp;quot;">
+<meta name="description" content="docker-compose.yml 配置文件（约定的 docker-compose 配置文件的名字）1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253version: &amp;quot;2.0&amp;quot;services:    web:      image">
 <meta name="keywords" content="docker,docker-compose">
 <meta property="og:type" content="article">
 <meta property="og:title" content="认识docker-compose（一）配置文件详解">
 <meta property="og:url" content="http://ijuniorfu.github.io/2017/08/26/认识docker-compose（一）配置文件详解/index.html">
 <meta property="og:site_name" content="ijuniorfu">
-<meta property="og:description" content="docker-compose.yml 配置文件（约定的 docker-compose 配置文件的名字）version: &amp;quot;2.0&amp;quot; services:     web:       image: ubuntu:16.04       ports:         - &amp;quot;80:80&amp;quot;         - &amp;quot;443:443&amp;quot;">
+<meta property="og:description" content="docker-compose.yml 配置文件（约定的 docker-compose 配置文件的名字）1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253version: &amp;quot;2.0&amp;quot;services:    web:      image">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-26T10:09:57.000Z">
+<meta property="og:updated_time" content="2017-08-26T10:21:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="认识docker-compose（一）配置文件详解">
-<meta name="twitter:description" content="docker-compose.yml 配置文件（约定的 docker-compose 配置文件的名字）version: &amp;quot;2.0&amp;quot; services:     web:       image: ubuntu:16.04       ports:         - &amp;quot;80:80&amp;quot;         - &amp;quot;443:443&amp;quot;">
+<meta name="twitter:description" content="docker-compose.yml 配置文件（约定的 docker-compose 配置文件的名字）1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253version: &amp;quot;2.0&amp;quot;services:    web:      image">
 
 
 
@@ -348,60 +348,8 @@
       
 
       
-        <h2 id="docker-compose-yml-配置文件（约定的-docker-compose-配置文件的名字）"><a href="#docker-compose-yml-配置文件（约定的-docker-compose-配置文件的名字）" class="headerlink" title="docker-compose.yml 配置文件（约定的 docker-compose 配置文件的名字）"></a>docker-compose.yml 配置文件（约定的 docker-compose 配置文件的名字）</h2><pre><code>version: &quot;2.0&quot;
-services:
-    web:
-      image: ubuntu:16.04
-      ports:
-        - &quot;80:80&quot;
-        - &quot;443:443&quot;
-        - &quot;9000:9000&quot;
-      links:
-        - mysql:mysql
-        - mongo:mongo
-        - memcached:memcached
-        - redis:redis
-        - elasticsearch:elasticsearch
-        - rabbitmq:rabbitmq
-      volumes:
-        - ./www:/var/www
-        - ./sites:/etc/nginx/conf.d
-        - ./logs:/var/log/supervisor
-
-    mysql:
-      image: mysql
-      ports:
-        - &quot;3306:3306&quot;
-      environment:
-        MYSQL_ROOT_PASSWORD: password
-
-    mongo:
-      image: mongo
-      ports:
-        - &quot;27017:27017&quot;
-
-    memcached:
-      image: memcached
-      ports:
-        - &quot;11211:11211&quot;
-
-    redis:
-      image: redis
-      ports:
-        - &quot;6379:6379&quot;
-
-    elasticsearch:
-      image: elasticsearch
-      ports:
-        - &quot;9200:9200&quot;
-        - &quot;9300:9300&quot;
-
-    rabbitmq:
-      image: rabbitmq:3.6.1-management
-      ports:
-        - &quot;15672:15672&quot;
-        - &quot;5672:5672&quot;
-</code></pre><p>一份标准配置文件应该包含 version、services、networks 三大部分，其中最关键的就是 services 和 networks 两个部分，下面先来看 services 的书写规则。</p>
+        <h2 id="docker-compose-yml-配置文件（约定的-docker-compose-配置文件的名字）"><a href="#docker-compose-yml-配置文件（约定的-docker-compose-配置文件的名字）" class="headerlink" title="docker-compose.yml 配置文件（约定的 docker-compose 配置文件的名字）"></a>docker-compose.yml 配置文件（约定的 docker-compose 配置文件的名字）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">version: &quot;2.0&quot;</div><div class="line">services:</div><div class="line">    web:</div><div class="line">      image: ubuntu:16.04</div><div class="line">      ports:</div><div class="line">        - &quot;80:80&quot;</div><div class="line">        - &quot;443:443&quot;</div><div class="line">        - &quot;9000:9000&quot;</div><div class="line">      links:</div><div class="line">        - mysql:mysql</div><div class="line">        - mongo:mongo</div><div class="line">        - memcached:memcached</div><div class="line">        - redis:redis</div><div class="line">        - elasticsearch:elasticsearch</div><div class="line">        - rabbitmq:rabbitmq</div><div class="line">      volumes:</div><div class="line">        - ./www:/var/www</div><div class="line">        - ./sites:/etc/nginx/conf.d</div><div class="line">        - ./logs:/var/log/supervisor</div><div class="line">    </div><div class="line">    mysql:</div><div class="line">      image: mysql</div><div class="line">      ports:</div><div class="line">        - &quot;3306:3306&quot;</div><div class="line">      environment:</div><div class="line">        MYSQL_ROOT_PASSWORD: password</div><div class="line">    </div><div class="line">    mongo:</div><div class="line">      image: mongo</div><div class="line">      ports:</div><div class="line">        - &quot;27017:27017&quot;</div><div class="line">    </div><div class="line">    memcached:</div><div class="line">      image: memcached</div><div class="line">      ports:</div><div class="line">        - &quot;11211:11211&quot;</div><div class="line">    </div><div class="line">    redis:</div><div class="line">      image: redis</div><div class="line">      ports:</div><div class="line">        - &quot;6379:6379&quot;</div><div class="line">    </div><div class="line">    elasticsearch:</div><div class="line">      image: elasticsearch</div><div class="line">      ports:</div><div class="line">        - &quot;9200:9200&quot;</div><div class="line">        - &quot;9300:9300&quot;</div><div class="line">    </div><div class="line">    rabbitmq:</div><div class="line">      image: rabbitmq:3.6.1-management</div><div class="line">      ports:</div><div class="line">        - &quot;15672:15672&quot;</div><div class="line">        - &quot;5672:5672&quot;</div></pre></td></tr></table></figure>
+<p>一份标准配置文件应该包含 version、services、networks 三大部分，其中最关键的就是 services 和 networks 两个部分，下面先来看 services 的书写规则。</p>
 <h2 id="version"><a href="#version" class="headerlink" title="version"></a>version</h2><p>这里是的version是配置文件的版本号，每个版本的配置文件格式有所不同</p>
 <h2 id="services"><a href="#services" class="headerlink" title="services"></a>services</h2><p>编排各个服务</p>
 <h2 id="image"><a href="#image" class="headerlink" title="image"></a>image</h2><p>在 services 标签下的第二级标签是 web，这个名字是用户自己自定义，它就是服务名称。<br>image 则是指定服务的镜像名称或镜像 ID。如果镜像在本地不存在，Compose 将会尝试拉取这个镜像。</p>
@@ -422,17 +370,9 @@ image: webapp:tag
   args:
     buildno: 1
     password: secret
-</code></pre><p>下面这种写法也是支持的，一般来说下面的写法更适合阅读。</p>
-<pre><code>build:
-  context: .
-  args:
-    - buildno=1
-    - password=secret
-</code></pre><p>与 ENV 不同的是，ARG 是允许空值的。例如：</p>
-<pre><code>args:
-  - buildno
-  - password
-</code></pre><p>这样构建过程可以向它们赋值。</p>
+</code></pre><p>下面这种写法也是支持的，一般来说下面的写法更适合阅读。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">build:</div><div class="line">  context: .</div><div class="line">  args:</div><div class="line">    - buildno=1</div><div class="line">    - password=secret</div></pre></td></tr></table></figure></p>
+<p>与 ENV 不同的是，ARG 是允许空值的。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">args:</div><div class="line">  - buildno</div><div class="line">  - password</div></pre></td></tr></table></figure></p>
+<p>这样构建过程可以向它们赋值。</p>
 <blockquote>
 <p>注意：YAML 的布尔值（true, false, yes, no, on, off）必须要使用引号引起来（单引号、双引号均可），否则会当成字符串解析。</p>
 </blockquote>
@@ -443,38 +383,21 @@ image: webapp:tag
 </code></pre><h2 id="container-name"><a href="#container-name" class="headerlink" title="container_name"></a>container_name</h2><p>前面说过 Compose 的容器名称格式是：&lt;项目名称&gt;&lt;服务名称&gt;&lt;序号&gt;<br>虽然可以自定义项目名称、服务名称，但是如果你想完全控制容器的命名，可以使用这个标签指定：</p>
 <pre><code>container_name: app
 </code></pre><p>这样容器的名字就指定为 app 了。</p>
-<h2 id="depends-on"><a href="#depends-on" class="headerlink" title="depends_on"></a>depends_on</h2><p>在使用 Compose 时，最大的好处就是少打启动命令，但是一般项目容器启动的顺序是有要求的，如果直接从上到下启动容器，必然会因为容器依赖问题而启动失败。<br>例如在没启动数据库容器的时候启动了应用容器，这时候应用容器会因为找不到数据库而退出，为了避免这种情况我们需要加入一个标签，就是 depends_on，这个标签解决了容器的依赖、启动先后的问题。<br>例如下面容器会先启动 redis 和 db 两个服务，最后才启动 web 服务：</p>
-<pre><code>version: &apos;2&apos;
-services:
-  web:
-    build: .
-    depends_on:
-      - db
-      - redis
-  redis:
-    image: redis
-  db:
-    image: postgres
-</code></pre><p>注意的是，默认情况下使用 docker-compose up web 这样的方式启动 web 服务时，也会启动 redis 和 db 两个服务，因为在配置文件中定义了依赖关系。</p>
-<h2 id="dns"><a href="#dns" class="headerlink" title="dns"></a>dns</h2><p>和 –dns 参数一样用途，格式如下：</p>
-<pre><code>dns: 8.8.8.8
-</code></pre><p>也可以是一个列表：</p>
+<h2 id="depends-on"><a href="#depends-on" class="headerlink" title="depends_on"></a>depends_on</h2><p>在使用 Compose 时，最大的好处就是少打启动命令，但是一般项目容器启动的顺序是有要求的，如果直接从上到下启动容器，必然会因为容器依赖问题而启动失败。<br>例如在没启动数据库容器的时候启动了应用容器，这时候应用容器会因为找不到数据库而退出，为了避免这种情况我们需要加入一个标签，就是 depends_on，这个标签解决了容器的依赖、启动先后的问题。<br>例如下面容器会先启动 redis 和 db 两个服务，最后才启动 web 服务：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">    version: &apos;2&apos;</div><div class="line">    services:</div><div class="line">      web:</div><div class="line">        build: .</div><div class="line">        depends_on:</div><div class="line">          - db</div><div class="line">          - redis</div><div class="line">      redis:</div><div class="line">        image: redis</div><div class="line">      db:</div><div class="line">        image: postgres</div><div class="line">```       </div><div class="line">        </div><div class="line">注意的是，默认情况下使用 docker-compose up web 这样的方式启动 web 服务时，也会启动 redis 和 db 两个服务，因为在配置文件中定义了依赖关系。</div><div class="line"></div><div class="line"></div><div class="line">## dns</div><div class="line"></div><div class="line">和 --dns 参数一样用途，格式如下：</div><div class="line"></div><div class="line">    dns: 8.8.8.8</div><div class="line">    </div><div class="line">也可以是一个列表：</div></pre></td></tr></table></figure></p>
 <pre><code>dns:
   - 8.8.8.8
   - 9.9.9.9
-</code></pre><p>此外 dns_search 的配置也类似：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">     </div><div class="line">此外 dns_search 的配置也类似：</div></pre></td></tr></table></figure>
 <pre><code>dns_search: example.com
 dns_search:
   - dc1.example.com
   - dc2.example.com
-</code></pre><h2 id="tmpfs"><a href="#tmpfs" class="headerlink" title="tmpfs"></a>tmpfs</h2><p>挂载临时目录到容器内部，与 run 的参数一样效果：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">## tmpfs</div><div class="line"></div><div class="line">挂载临时目录到容器内部，与 run 的参数一样效果：</div></pre></td></tr></table></figure>
 <pre><code>tmpfs: /run
 tmpfs:
   - /run
   - /tmp
-</code></pre><h2 id="entrypoint"><a href="#entrypoint" class="headerlink" title="entrypoint"></a>entrypoint</h2><p>在 Dockerfile 中有一个指令叫做 ENTRYPOINT 指令，用于指定接入点，第四章有对比过与 CMD 的区别。<br>在 docker-compose.yml 中可以定义接入点，覆盖 Dockerfile 中的定义：</p>
-<pre><code>entrypoint: /code/entrypoint.sh
-</code></pre><p>格式和 Docker 类似，不过还可以写成这样：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">## entrypoint</div><div class="line"></div><div class="line">在 Dockerfile 中有一个指令叫做 ENTRYPOINT 指令，用于指定接入点，第四章有对比过与 CMD 的区别。</div><div class="line">在 docker-compose.yml 中可以定义接入点，覆盖 Dockerfile 中的定义：</div><div class="line">    </div><div class="line">    entrypoint: /code/entrypoint.sh</div><div class="line">    </div><div class="line">格式和 Docker 类似，不过还可以写成这样：</div></pre></td></tr></table></figure>
 <pre><code>entrypoint:
     - php
     - -d
@@ -482,16 +405,12 @@ tmpfs:
     - -d
     - memory_limit=-1
     - vendor/bin/phpunit
-</code></pre><h2 id="env-file"><a href="#env-file" class="headerlink" title="env_file"></a>env_file</h2><p>docker-compose.yml 中可以定义一个专门存放变量的文件。<br>如果通过 docker-compose -f FILE 指定了配置文件，则 env_file 中路径会使用配置文件路径。</p>
-<p>如果有变量名称与 environment 指令冲突，则以后者为准。格式如下：</p>
-<pre><code>env_file: .env
-</code></pre><p>或者根据 docker-compose.yml 设置多个：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">        </div><div class="line">## env_file</div><div class="line"></div><div class="line">docker-compose.yml 中可以定义一个专门存放变量的文件。</div><div class="line">如果通过 docker-compose -f FILE 指定了配置文件，则 env_file 中路径会使用配置文件路径。</div><div class="line"></div><div class="line">如果有变量名称与 environment 指令冲突，则以后者为准。格式如下：</div><div class="line">    </div><div class="line">    env_file: .env</div><div class="line">    </div><div class="line">或者根据 docker-compose.yml 设置多个：</div></pre></td></tr></table></figure>
 <pre><code>env_file:
   - ./common.env
   - ./apps/web.env
   - /opt/secrets.env
-</code></pre><p>注意的是这里所说的环境变量是对宿主机的 Compose 而言的，如果在配置文件中有 build 操作，这些变量并不会进入构建过程中，如果要在构建中使用变量还是首选前面刚讲的 arg 标签。</p>
-<h2 id="environment"><a href="#environment" class="headerlink" title="environment"></a>environment</h2><p>与上面的 env_file 标签完全不同，反而和 arg 有几分类似，这个标签的作用是设置镜像变量，它可以保存变量到镜像里面，也就是说启动的容器也会包含这些变量设置，这是与 arg 最大的不同。<br>一般 arg 标签的变量仅用在构建过程中。而 environment 和 Dockerfile 中的 ENV 指令一样会把变量一直保存在镜像、容器中，类似 docker run -e 的效果。</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">注意的是这里所说的环境变量是对宿主机的 Compose 而言的，如果在配置文件中有 build 操作，这些变量并不会进入构建过程中，如果要在构建中使用变量还是首选前面刚讲的 arg 标签。</div><div class="line"></div><div class="line"></div><div class="line">## environment</div><div class="line"></div><div class="line">与上面的 env_file 标签完全不同，反而和 arg 有几分类似，这个标签的作用是设置镜像变量，它可以保存变量到镜像里面，也就是说启动的容器也会包含这些变量设置，这是与 arg 最大的不同。</div><div class="line">一般 arg 标签的变量仅用在构建过程中。而 environment 和 Dockerfile 中的 ENV 指令一样会把变量一直保存在镜像、容器中，类似 docker run -e 的效果。</div></pre></td></tr></table></figure>
 <pre><code>environment:
   RACK_ENV: development
   SHOW: &apos;true&apos;
@@ -501,23 +420,13 @@ environment:
   - RACK_ENV=development
   - SHOW=true
   - SESSION_SECRET
-</code></pre><h2 id="expose"><a href="#expose" class="headerlink" title="expose"></a>expose</h2><p>这个标签与Dockerfile中的EXPOSE指令一样，用于指定暴露的端口，但是只是作为一种参考，实际上docker-compose.yml的端口映射还得ports这样的标签。</p>
-<pre><code>expose:
- - &quot;3000&quot;
- - &quot;8000&quot;
-</code></pre><h2 id="external-links"><a href="#external-links" class="headerlink" title="external_links"></a>external_links</h2><p>在使用Docker过程中，我们会有许多单独使用docker run启动的容器，为了使Compose能够连接这些不在docker-compose.yml中定义的容器，我们需要一个特殊的标签，就是external_links，它可以让Compose项目里面的容器连接到那些项目配置外部的容器（前提是外部容器中必须至少有一个容器是连接到与项目内的服务的同一个网络里面）。<br>格式如下：</p>
-<pre><code>external_links:
- - redis_1
- - project_db_1:mysql
- - project_db_1:postgresql
-</code></pre><h2 id="extra-hosts"><a href="#extra-hosts" class="headerlink" title="extra_hosts"></a>extra_hosts</h2><p>添加主机名的标签，就是往/etc/hosts文件中添加一些记录，与Docker client的–add-host类似：</p>
-<pre><code>extra_hosts:
- - &quot;somehost:162.242.195.82&quot;
- - &quot;otherhost:50.31.209.229&quot;
-</code></pre><p>启动之后查看容器内部hosts： </p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">## expose</div><div class="line"></div><div class="line">这个标签与Dockerfile中的EXPOSE指令一样，用于指定暴露的端口，但是只是作为一种参考，实际上docker-compose.yml的端口映射还得ports这样的标签。</div><div class="line">```    </div><div class="line">    expose:</div><div class="line">     - &quot;3000&quot;</div><div class="line">     - &quot;8000&quot;</div></pre></td></tr></table></figure>
+<h2 id="external-links"><a href="#external-links" class="headerlink" title="external_links"></a>external_links</h2><p>在使用Docker过程中，我们会有许多单独使用docker run启动的容器，为了使Compose能够连接这些不在docker-compose.yml中定义的容器，我们需要一个特殊的标签，就是external_links，它可以让Compose项目里面的容器连接到那些项目配置外部的容器（前提是外部容器中必须至少有一个容器是连接到与项目内的服务的同一个网络里面）。<br>格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">external_links:</div><div class="line"> - redis_1</div><div class="line"> - project_db_1:mysql</div><div class="line"> - project_db_1:postgresql</div></pre></td></tr></table></figure>
+<h2 id="extra-hosts"><a href="#extra-hosts" class="headerlink" title="extra_hosts"></a>extra_hosts</h2><p>添加主机名的标签，就是往/etc/hosts文件中添加一些记录，与Docker client的–add-host类似：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">    extra_hosts:</div><div class="line">     - &quot;somehost:162.242.195.82&quot;</div><div class="line">     - &quot;otherhost:50.31.209.229&quot;</div><div class="line"> ```    </div><div class="line">启动之后查看容器内部hosts：</div></pre></td></tr></table></figure></p>
 <pre><code>162.242.195.82  somehost
 50.31.209.229   otherhost
-</code></pre><h2 id="labels"><a href="#labels" class="headerlink" title="labels"></a>labels</h2><p>向容器添加元数据，和Dockerfile的LABEL指令一个意思，格式如下：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">## labels</div><div class="line"></div><div class="line">向容器添加元数据，和Dockerfile的LABEL指令一个意思，格式如下：</div></pre></td></tr></table></figure>
 <pre><code>labels:
    com.example.description: &quot;Accounting webapp&quot;
    com.example.department: &quot;Finance&quot;
@@ -526,40 +435,31 @@ environment:
    - &quot;com.example.description=Accounting webapp&quot;
    - &quot;com.example.department=Finance&quot;
    - &quot;com.example.label-with-empty-value&quot;
-</code></pre><h2 id="links"><a href="#links" class="headerlink" title="links"></a>links</h2><p>还记得上面的depends_on吧，那个标签解决的是启动顺序问题，这个标签解决的是容器连接问题，与Docker client的–link一样效果，会连接到其它服务中的容器。<br>格式如下：</p>
+</code></pre> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">## links</div><div class="line"></div><div class="line">还记得上面的depends_on吧，那个标签解决的是启动顺序问题，这个标签解决的是容器连接问题，与Docker client的--link一样效果，会连接到其它服务中的容器。</div><div class="line">格式如下：</div></pre></td></tr></table></figure>
 <pre><code>links:
  - db
  - db:database
  - redis
-</code></pre><p>使用的别名将会自动在服务容器中的/etc/hosts里创建。例如：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">使用的别名将会自动在服务容器中的/etc/hosts里创建。例如：</div></pre></td></tr></table></figure>
 <pre><code>172.12.2.186  db
 172.12.2.186  database
 172.12.2.187  redis
-</code></pre><p>相应的环境变量也将被创建。</p>
-<h2 id="logging"><a href="#logging" class="headerlink" title="logging"></a>logging</h2><p>这个标签用于配置日志服务。格式如下：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">相应的环境变量也将被创建。</div><div class="line"></div><div class="line">## logging</div><div class="line"></div><div class="line">这个标签用于配置日志服务。格式如下：</div></pre></td></tr></table></figure>
 <pre><code>logging:
   driver: syslog
   options:
     syslog-address: &quot;tcp://192.168.0.42:123&quot;
-</code></pre><p>默认的driver是json-file。只有json-file和journald可以通过docker-compose logs显示日志，其他方式有其他日志查看方式，但目前Compose不支持。对于可选值可以使用options指定。</p>
-<h2 id="pid"><a href="#pid" class="headerlink" title="pid"></a>pid</h2><pre><code>pid: &quot;host&quot;
-</code></pre><p>将PID模式设置为主机PID模式，跟主机系统共享进程命名空间。容器使用这个标签将能够访问和操纵其他容器和宿主机的名称空间。</p>
-<h2 id="ports"><a href="#ports" class="headerlink" title="ports"></a>ports</h2><p>映射端口的标签。<br>使用HOST:CONTAINER格式或者只是指定容器的端口，宿主机会随机映射端口。</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">默认的driver是json-file。只有json-file和journald可以通过docker-compose logs显示日志，其他方式有其他日志查看方式，但目前Compose不支持。对于可选值可以使用options指定。</div><div class="line"></div><div class="line">## pid</div><div class="line"></div><div class="line">    pid: &quot;host&quot;</div><div class="line">    </div><div class="line">将PID模式设置为主机PID模式，跟主机系统共享进程命名空间。容器使用这个标签将能够访问和操纵其他容器和宿主机的名称空间。</div><div class="line"></div><div class="line">## ports</div><div class="line"></div><div class="line">映射端口的标签。</div><div class="line">使用HOST:CONTAINER格式或者只是指定容器的端口，宿主机会随机映射端口。</div></pre></td></tr></table></figure>
 <pre><code>ports:
  - &quot;3000&quot;
  - &quot;8000:8000&quot;
  - &quot;49100:22&quot;
  - &quot;127.0.0.1:8001:8001&quot;
-</code></pre><blockquote>
-<p>注意：当使用HOST:CONTAINER格式来映射端口时，如果你使用的容器端口小于60你可能会得到错误得结果，因为YAML将会解析xx:yy这种数字格式为60进制。<br>所以建议采用字符串格式。</p>
-</blockquote>
-<h2 id="security-opt"><a href="#security-opt" class="headerlink" title="security_opt"></a>security_opt</h2><p>为每个容器覆盖默认的标签。简单说来就是管理全部服务的标签。比如设置全部服务的user标签值为USER。</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt; 注意：当使用HOST:CONTAINER格式来映射端口时，如果你使用的容器端口小于60你可能会得到错误得结果，因为YAML将会解析xx:yy这种数字格式为60进制。</div><div class="line">&gt; 所以建议采用字符串格式。</div><div class="line"></div><div class="line">## security_opt</div><div class="line"></div><div class="line">为每个容器覆盖默认的标签。简单说来就是管理全部服务的标签。比如设置全部服务的user标签值为USER。</div></pre></td></tr></table></figure>
 <pre><code>security_opt:
   - label:user:USER
   - label:role:ROLE
-</code></pre><h2 id="stop-signal"><a href="#stop-signal" class="headerlink" title="stop_signal"></a>stop_signal</h2><p>设置另一个信号来停止容器。在默认情况下使用的是SIGTERM停止容器。设置另一个信号可以使用stop_signal标签。</p>
-<pre><code>stop_signal: SIGUSR1
-</code></pre><h2 id="volumes"><a href="#volumes" class="headerlink" title="volumes"></a>volumes</h2><p>挂载一个目录或者一个已存在的数据卷容器，可以直接使用 [HOST:CONTAINER] 这样的格式，或者使用 [HOST:CONTAINER:ro] 这样的格式，后者对于容器来说，数据卷是只读的，这样可以有效保护宿主机的文件系统。<br>Compose的数据卷指定路径可以是相对路径，使用 . 或者 .. 来指定相对目录。<br>数据卷的格式可以是下面多种形式：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">## stop_signal</div><div class="line"></div><div class="line">设置另一个信号来停止容器。在默认情况下使用的是SIGTERM停止容器。设置另一个信号可以使用stop_signal标签。</div><div class="line"></div><div class="line">    stop_signal: SIGUSR1</div><div class="line">    </div><div class="line">## volumes</div><div class="line"></div><div class="line">挂载一个目录或者一个已存在的数据卷容器，可以直接使用 [HOST:CONTAINER] 这样的格式，或者使用 [HOST:CONTAINER:ro] 这样的格式，后者对于容器来说，数据卷是只读的，这样可以有效保护宿主机的文件系统。</div><div class="line">Compose的数据卷指定路径可以是相对路径，使用 . 或者 .. 来指定相对目录。</div><div class="line">数据卷的格式可以是下面多种形式：</div></pre></td></tr></table></figure>
 <pre><code>volumes:
   // 只是指定一个路径，Docker 会自动在创建一个数据卷（这个路径是容器内部的）。
   - /var/lib/mysql
@@ -575,44 +475,39 @@ environment:
 
   // 已经存在的命名的数据卷。
   - datavolume:/var/lib/mysql
-</code></pre><p>如果你不使用宿主机的路径，你可以指定一个volume_driver。</p>
-<h2 id="volumes-from"><a href="#volumes-from" class="headerlink" title="volumes_from"></a>volumes_from</h2><p>从其它容器或者服务挂载数据卷，可选的参数是 :ro或者 :rw，前者表示容器只读，后者表示容器对数据卷是可读可写的。默认情况下是可读可写的。</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">      </div><div class="line">      </div><div class="line">如果你不使用宿主机的路径，你可以指定一个volume_driver。</div><div class="line"></div><div class="line"></div><div class="line">## volumes_from</div><div class="line"></div><div class="line">从其它容器或者服务挂载数据卷，可选的参数是 :ro或者 :rw，前者表示容器只读，后者表示容器对数据卷是可读可写的。默认情况下是可读可写的。</div></pre></td></tr></table></figure>
 <pre><code>volumes_from:
   - service_name
   - service_name:ro
   - container:container_name
   - container:container_name:rw
-</code></pre><h2 id="cap-add-cap-drop"><a href="#cap-add-cap-drop" class="headerlink" title="cap_add, cap_drop"></a>cap_add, cap_drop</h2><p>添加或删除容器的内核功能。</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">## cap_add, cap_drop</div><div class="line"></div><div class="line">添加或删除容器的内核功能。</div></pre></td></tr></table></figure>
 <pre><code>cap_add:
   - ALL
 
 cap_drop:
   - NET_ADMIN
   - SYS_ADMIN
-</code></pre><h2 id="cgroup-parent"><a href="#cgroup-parent" class="headerlink" title="cgroup_parent"></a>cgroup_parent</h2><p>指定一个容器的父级cgroup。</p>
-<pre><code>cgroup_parent: m-executor-abcd
-</code></pre><h2 id="devices"><a href="#devices" class="headerlink" title="devices"></a>devices</h2><p>设备映射列表。与Docker client的–device参数类似。</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">## cgroup_parent</div><div class="line"></div><div class="line">指定一个容器的父级cgroup。</div><div class="line"></div><div class="line">    cgroup_parent: m-executor-abcd</div><div class="line">    </div><div class="line">## devices</div><div class="line"></div><div class="line">设备映射列表。与Docker client的--device参数类似。</div></pre></td></tr></table></figure>
 <pre><code>devices:
   - &quot;/dev/ttyUSB0:/dev/ttyUSB0&quot;
-</code></pre><h2 id="extends"><a href="#extends" class="headerlink" title="extends"></a>extends</h2><p>这个标签可以扩展另一个服务，扩展内容可以是来自在当前文件，也可以是来自其他文件，相同服务的情况下，后来者会有选择地覆盖原有配置。</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">## extends</div><div class="line"></div><div class="line">这个标签可以扩展另一个服务，扩展内容可以是来自在当前文件，也可以是来自其他文件，相同服务的情况下，后来者会有选择地覆盖原有配置。</div></pre></td></tr></table></figure>
 <pre><code>extends:
   file: common.yml
   service: webapp
-</code></pre><p>用户可以在任何地方使用这个标签，只要标签内容包含file和service两个值就可以了。file的值可以是相对或者绝对路径，如果不指定file的值，那么Compose会读取当前YML文件的信息。</p>
-<h2 id="network-mode"><a href="#network-mode" class="headerlink" title="network_mode"></a>network_mode</h2><p>网络模式，与Docker client的–net参数类似，只是相对多了一个service:[service name] 的格式。<br>例如：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">用户可以在任何地方使用这个标签，只要标签内容包含file和service两个值就可以了。file的值可以是相对或者绝对路径，如果不指定file的值，那么Compose会读取当前YML文件的信息。</div><div class="line"></div><div class="line">## network_mode</div><div class="line"></div><div class="line">网络模式，与Docker client的--net参数类似，只是相对多了一个service:[service name] 的格式。</div><div class="line">例如：</div></pre></td></tr></table></figure>
 <pre><code>network_mode: &quot;bridge&quot;
 network_mode: &quot;host&quot;
 network_mode: &quot;none&quot;
 network_mode: &quot;service:[service name]&quot;
 network_mode: &quot;container:[container name/id]&quot;
-</code></pre><p>可以指定使用服务或者容器的网络。</p>
-<h2 id="networks"><a href="#networks" class="headerlink" title="networks"></a>networks</h2><p>加入指定网络，格式如下：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">可以指定使用服务或者容器的网络。</div><div class="line"></div><div class="line">## networks</div><div class="line"></div><div class="line">加入指定网络，格式如下：</div></pre></td></tr></table></figure>
 <pre><code>services:
   some-service:
     networks:
      - some-network
      - other-network
-</code></pre><p>关于这个标签还有一个特别的子标签aliases，这是一个用来设置服务别名的标签，例如：</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">关于这个标签还有一个特别的子标签aliases，这是一个用来设置服务别名的标签，例如：</div></pre></td></tr></table></figure>
 <pre><code>services:
   some-service:
     networks:
@@ -623,8 +518,7 @@ network_mode: &quot;container:[container name/id]&quot;
       other-network:
         aliases:
          - alias2
-</code></pre><p>相同的服务可以在不同的网络有不同的别名。</p>
-<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>还有这些标签：cpu_shares, cpu_quota, cpuset, domainname, hostname, ipc, mac_address, mem_limit, memswap_limit, privileged, read_only, restart, shm_size, stdin_open, tty, user, working_dir<br>上面这些都是一个单值的标签，类似于使用docker run的效果。</p>
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">相同的服务可以在不同的网络有不同的别名。</div><div class="line"></div><div class="line"></div><div class="line">## 其它</div><div class="line"></div><div class="line">还有这些标签：cpu_shares, cpu_quota, cpuset, domainname, hostname, ipc, mac_address, mem_limit, memswap_limit, privileged, read_only, restart, shm_size, stdin_open, tty, user, working_dir</div><div class="line">上面这些都是一个单值的标签，类似于使用docker run的效果。</div></pre></td></tr></table></figure>
 <pre><code>cpu_shares: 73
 cpu_quota: 50000
 cpuset: 0,1
@@ -647,7 +541,8 @@ read_only: true
 shm_size: 64M
 stdin_open: true
 tty: true
-</code></pre>
+</code></pre><p>```   </p>
+
       
     </div>
 
@@ -839,7 +734,7 @@ tty: true
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-compose-yml-配置文件（约定的-docker-compose-配置文件的名字）"><span class="nav-number">1.</span> <span class="nav-text">docker-compose.yml 配置文件（约定的 docker-compose 配置文件的名字）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#version"><span class="nav-number">2.</span> <span class="nav-text">version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#services"><span class="nav-number">3.</span> <span class="nav-text">services</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#image"><span class="nav-number">4.</span> <span class="nav-text">image</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build"><span class="nav-number">5.</span> <span class="nav-text">build</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#command"><span class="nav-number">6.</span> <span class="nav-text">command</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#container-name"><span class="nav-number">7.</span> <span class="nav-text">container_name</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#depends-on"><span class="nav-number">8.</span> <span class="nav-text">depends_on</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns"><span class="nav-number">9.</span> <span class="nav-text">dns</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tmpfs"><span class="nav-number">10.</span> <span class="nav-text">tmpfs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#entrypoint"><span class="nav-number">11.</span> <span class="nav-text">entrypoint</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#env-file"><span class="nav-number">12.</span> <span class="nav-text">env_file</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#environment"><span class="nav-number">13.</span> <span class="nav-text">environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#expose"><span class="nav-number">14.</span> <span class="nav-text">expose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#external-links"><span class="nav-number">15.</span> <span class="nav-text">external_links</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extra-hosts"><span class="nav-number">16.</span> <span class="nav-text">extra_hosts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#labels"><span class="nav-number">17.</span> <span class="nav-text">labels</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#links"><span class="nav-number">18.</span> <span class="nav-text">links</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#logging"><span class="nav-number">19.</span> <span class="nav-text">logging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pid"><span class="nav-number">20.</span> <span class="nav-text">pid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ports"><span class="nav-number">21.</span> <span class="nav-text">ports</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#security-opt"><span class="nav-number">22.</span> <span class="nav-text">security_opt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stop-signal"><span class="nav-number">23.</span> <span class="nav-text">stop_signal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volumes"><span class="nav-number">24.</span> <span class="nav-text">volumes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volumes-from"><span class="nav-number">25.</span> <span class="nav-text">volumes_from</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cap-add-cap-drop"><span class="nav-number">26.</span> <span class="nav-text">cap_add, cap_drop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cgroup-parent"><span class="nav-number">27.</span> <span class="nav-text">cgroup_parent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#devices"><span class="nav-number">28.</span> <span class="nav-text">devices</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extends"><span class="nav-number">29.</span> <span class="nav-text">extends</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#network-mode"><span class="nav-number">30.</span> <span class="nav-text">network_mode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#networks"><span class="nav-number">31.</span> <span class="nav-text">networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">32.</span> <span class="nav-text">其它</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-compose-yml-配置文件（约定的-docker-compose-配置文件的名字）"><span class="nav-number">1.</span> <span class="nav-text">docker-compose.yml 配置文件（约定的 docker-compose 配置文件的名字）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#version"><span class="nav-number">2.</span> <span class="nav-text">version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#services"><span class="nav-number">3.</span> <span class="nav-text">services</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#image"><span class="nav-number">4.</span> <span class="nav-text">image</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build"><span class="nav-number">5.</span> <span class="nav-text">build</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#command"><span class="nav-number">6.</span> <span class="nav-text">command</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#container-name"><span class="nav-number">7.</span> <span class="nav-text">container_name</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#depends-on"><span class="nav-number">8.</span> <span class="nav-text">depends_on</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#external-links"><span class="nav-number">9.</span> <span class="nav-text">external_links</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extra-hosts"><span class="nav-number">10.</span> <span class="nav-text">extra_hosts</span></a></li></ol></div>
             
 
           </div>
