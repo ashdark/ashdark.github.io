@@ -15,23 +15,28 @@
 </code></pre><p>也可以是相对路径，只要上下文确定就可以读取到 Dockerfile。</p>
 <pre><code>build: ./dir
 </code></pre><p>设定上下文根目录，然后以该目录为准指定 Dockerfile。</p>
-<pre><code>build:
-  context: ../
-  dockerfile: path/of/Dockerfile
-</code></pre><p>注意 build 都是一个目录，如果你要指定 Dockerfile 文件需要在 build 标签的子级标签中使用 dockerfile 标签指定，如上面的例子。<br>如果你同时指定了 image 和 build 两个标签，那么 Compose 会构建镜像并且把镜像命名为 image 后面的那个名字。</p>
-<pre><code>build: ./dir
-image: webapp:tag
-</code></pre><p>既然可以在 docker-compose.yml 中定义构建任务，那么一定少不了 arg 这个标签，就像 Dockerfile 中的 ARG 指令，它可以在构建过程中指定环境变量，但是在构建成功后取消，在 docker-compose.yml 文件中也支持这样的写法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">    build:</div><div class="line">      context: .</div><div class="line">      args:</div><div class="line">        buildno: 1</div><div class="line">        password: secret</div><div class="line">```        </div><div class="line">        </div><div class="line">下面这种写法也是支持的，一般来说下面的写法更适合阅读。</div></pre></td></tr></table></figure></p>
-<pre><code>build:
-  context: .
-  args:
-    - buildno=1
-    - password=secret
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">与 ENV 不同的是，ARG 是允许空值的。例如：</div></pre></td></tr></table></figure>
-<pre><code>args:
-  - buildno
-  - password
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">这样构建过程可以向它们赋值。</div><div class="line"></div><div class="line">&gt;注意：YAML 的布尔值（true, false, yes, no, on, off）必须要使用引号引起来（单引号、双引号均可），否则会当成字符串解析。</div><div class="line"></div><div class="line">## command</div><div class="line"></div><div class="line">使用 command 可以覆盖容器启动后默认执行的命令。</div><div class="line"></div><div class="line">    command: bundle exec thin -p 3000</div><div class="line">    </div><div class="line">也可以写成类似 Dockerfile 中的格式：</div><div class="line"></div><div class="line">    command: [bundle, exec, thin, -p, 3000]</div><div class="line">    </div><div class="line"></div><div class="line">## container_name</div><div class="line"></div><div class="line">前面说过 Compose 的容器名称格式是：&lt;项目名称&gt;&lt;服务名称&gt;&lt;序号&gt;</div><div class="line">虽然可以自定义项目名称、服务名称，但是如果你想完全控制容器的命名，可以使用这个标签指定：</div><div class="line"></div><div class="line">    container_name: app</div><div class="line">    </div><div class="line">这样容器的名字就指定为 app 了。</div><div class="line"></div><div class="line"></div><div class="line">## depends_on</div><div class="line"></div><div class="line">在使用 Compose 时，最大的好处就是少打启动命令，但是一般项目容器启动的顺序是有要求的，如果直接从上到下启动容器，必然会因为容器依赖问题而启动失败。</div><div class="line">例如在没启动数据库容器的时候启动了应用容器，这时候应用容器会因为找不到数据库而退出，为了避免这种情况我们需要加入一个标签，就是 depends_on，这个标签解决了容器的依赖、启动先后的问题。</div><div class="line">例如下面容器会先启动 redis 和 db 两个服务，最后才启动 web 服务：</div><div class="line"></div><div class="line">```   </div><div class="line">    version: &apos;2&apos;</div><div class="line">    services:</div><div class="line">      web:</div><div class="line">        build: .</div><div class="line">        depends_on:</div><div class="line">          - db</div><div class="line">          - redis</div><div class="line">      redis:</div><div class="line">        image: redis</div><div class="line">      db:</div><div class="line">        image: postgres</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">build:</div><div class="line">  context: ../</div><div class="line">  dockerfile: path/of/Dockerfile</div></pre></td></tr></table></figure>
+<p>注意 build 都是一个目录，如果你要指定 Dockerfile 文件需要在 build 标签的子级标签中使用 dockerfile 标签指定，如上面的例子。<br>如果你同时指定了 image 和 build 两个标签，那么 Compose 会构建镜像并且把镜像命名为 image 后面的那个名字。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">build: ./dir</div><div class="line">image: webapp:tag</div></pre></td></tr></table></figure>
+<p>既然可以在 docker-compose.yml 中定义构建任务，那么一定少不了 arg 这个标签，就像 Dockerfile 中的 ARG 指令，它可以在构建过程中指定环境变量，但是在构建成功后取消，在 docker-compose.yml 文件中也支持这样的写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">build:</div><div class="line">  context: .</div><div class="line">  args:</div><div class="line">    buildno: 1</div><div class="line">    password: secret</div></pre></td></tr></table></figure>
+<p>下面这种写法也是支持的，一般来说下面的写法更适合阅读。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">build:</div><div class="line">  context: .</div><div class="line">  args:</div><div class="line">    - buildno=1</div><div class="line">    - password=secret</div></pre></td></tr></table></figure>
+<p>与 ENV 不同的是，ARG 是允许空值的。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">args:</div><div class="line">  - buildno</div><div class="line">  - password</div></pre></td></tr></table></figure>
+<p>这样构建过程可以向它们赋值。</p>
+<blockquote>
+<p>注意：YAML 的布尔值（true, false, yes, no, on, off）必须要使用引号引起来（单引号、双引号均可），否则会当成字符串解析。</p>
+</blockquote>
+<h2 id="command"><a href="#command" class="headerlink" title="command"></a>command</h2><p>使用 command 可以覆盖容器启动后默认执行的命令。</p>
+<pre><code>command: bundle exec thin -p 3000
+</code></pre><p>也可以写成类似 Dockerfile 中的格式：</p>
+<pre><code>command: [bundle, exec, thin, -p, 3000]
+</code></pre><h2 id="container-name"><a href="#container-name" class="headerlink" title="container_name"></a>container_name</h2><p>前面说过 Compose 的容器名称格式是：&lt;项目名称&gt;&lt;服务名称&gt;&lt;序号&gt;<br>虽然可以自定义项目名称、服务名称，但是如果你想完全控制容器的命名，可以使用这个标签指定：</p>
+<pre><code>container_name: app
+</code></pre><p>这样容器的名字就指定为 app 了。</p>
+<h2 id="depends-on"><a href="#depends-on" class="headerlink" title="depends_on"></a>depends_on</h2><p>在使用 Compose 时，最大的好处就是少打启动命令，但是一般项目容器启动的顺序是有要求的，如果直接从上到下启动容器，必然会因为容器依赖问题而启动失败。<br>例如在没启动数据库容器的时候启动了应用容器，这时候应用容器会因为找不到数据库而退出，为了避免这种情况我们需要加入一个标签，就是 depends_on，这个标签解决了容器的依赖、启动先后的问题。<br>例如下面容器会先启动 redis 和 db 两个服务，最后才启动 web 服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">version: &apos;2&apos;</div><div class="line">services:</div><div class="line">  web:</div><div class="line">    build: .</div><div class="line">    depends_on:</div><div class="line">      - db</div><div class="line">      - redis</div><div class="line">  redis:</div><div class="line">    image: redis</div><div class="line">  db:</div><div class="line">    image: postgres</div></pre></td></tr></table></figure>
 <p>注意的是，默认情况下使用 docker-compose up web 这样的方式启动 web 服务时，也会启动 redis 和 db 两个服务，因为在配置文件中定义了依赖关系。</p>
 <h2 id="dns"><a href="#dns" class="headerlink" title="dns"></a>dns</h2><p>和 –dns 参数一样用途，格式如下：</p>
 <pre><code>dns: 8.8.8.8
@@ -54,125 +59,54 @@ image: webapp:tag
 <h2 id="external-links"><a href="#external-links" class="headerlink" title="external_links"></a>external_links</h2><p>在使用Docker过程中，我们会有许多单独使用docker run启动的容器，为了使Compose能够连接这些不在docker-compose.yml中定义的容器，我们需要一个特殊的标签，就是external_links，它可以让Compose项目里面的容器连接到那些项目配置外部的容器（前提是外部容器中必须至少有一个容器是连接到与项目内的服务的同一个网络里面）。<br>格式如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">external_links:</div><div class="line"> - redis_1</div><div class="line"> - project_db_1:mysql</div><div class="line"> - project_db_1:postgresql</div></pre></td></tr></table></figure>
 <h2 id="extra-hosts"><a href="#extra-hosts" class="headerlink" title="extra_hosts"></a>extra_hosts</h2><p>添加主机名的标签，就是往/etc/hosts文件中添加一些记录，与Docker client的–add-host类似：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">    extra_hosts:</div><div class="line">     - &quot;somehost:162.242.195.82&quot;</div><div class="line">     - &quot;otherhost:50.31.209.229&quot;</div><div class="line"> ```  </div><div class="line">   </div><div class="line">启动之后查看容器内部hosts：</div></pre></td></tr></table></figure>
-<pre><code>162.242.195.82  somehost
-50.31.209.229   otherhost
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">## labels</div><div class="line"></div><div class="line">向容器添加元数据，和Dockerfile的LABEL指令一个意思，格式如下：</div></pre></td></tr></table></figure>
-<pre><code>labels:
-   com.example.description: &quot;Accounting webapp&quot;
-   com.example.department: &quot;Finance&quot;
-   com.example.label-with-empty-value: &quot;&quot;
- labels:
-   - &quot;com.example.description=Accounting webapp&quot;
-   - &quot;com.example.department=Finance&quot;
-   - &quot;com.example.label-with-empty-value&quot;
-</code></pre> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">## links</div><div class="line"></div><div class="line">还记得上面的depends_on吧，那个标签解决的是启动顺序问题，这个标签解决的是容器连接问题，与Docker client的--link一样效果，会连接到其它服务中的容器。</div><div class="line">格式如下：</div></pre></td></tr></table></figure>
-<pre><code>links:
- - db
- - db:database
- - redis
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">使用的别名将会自动在服务容器中的/etc/hosts里创建。例如：</div></pre></td></tr></table></figure>
-<pre><code>172.12.2.186  db
-172.12.2.186  database
-172.12.2.187  redis
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">相应的环境变量也将被创建。</div><div class="line"></div><div class="line">## logging</div><div class="line"></div><div class="line">这个标签用于配置日志服务。格式如下：</div></pre></td></tr></table></figure>
-<pre><code>logging:
-  driver: syslog
-  options:
-    syslog-address: &quot;tcp://192.168.0.42:123&quot;
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">默认的driver是json-file。只有json-file和journald可以通过docker-compose logs显示日志，其他方式有其他日志查看方式，但目前Compose不支持。对于可选值可以使用options指定。</div><div class="line"></div><div class="line">## pid</div><div class="line"></div><div class="line">    pid: &quot;host&quot;</div><div class="line">    </div><div class="line">将PID模式设置为主机PID模式，跟主机系统共享进程命名空间。容器使用这个标签将能够访问和操纵其他容器和宿主机的名称空间。</div><div class="line"></div><div class="line">## ports</div><div class="line"></div><div class="line">映射端口的标签。</div><div class="line">使用HOST:CONTAINER格式或者只是指定容器的端口，宿主机会随机映射端口。</div></pre></td></tr></table></figure>
-<pre><code>ports:
- - &quot;3000&quot;
- - &quot;8000:8000&quot;
- - &quot;49100:22&quot;
- - &quot;127.0.0.1:8001:8001&quot;
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&gt; 注意：当使用HOST:CONTAINER格式来映射端口时，如果你使用的容器端口小于60你可能会得到错误得结果，因为YAML将会解析xx:yy这种数字格式为60进制。</div><div class="line">&gt; 所以建议采用字符串格式。</div><div class="line"></div><div class="line">## security_opt</div><div class="line"></div><div class="line">为每个容器覆盖默认的标签。简单说来就是管理全部服务的标签。比如设置全部服务的user标签值为USER。</div></pre></td></tr></table></figure>
-<pre><code>security_opt:
-  - label:user:USER
-  - label:role:ROLE
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">## stop_signal</div><div class="line"></div><div class="line">设置另一个信号来停止容器。在默认情况下使用的是SIGTERM停止容器。设置另一个信号可以使用stop_signal标签。</div><div class="line"></div><div class="line">    stop_signal: SIGUSR1</div><div class="line">    </div><div class="line">## volumes</div><div class="line"></div><div class="line">挂载一个目录或者一个已存在的数据卷容器，可以直接使用 [HOST:CONTAINER] 这样的格式，或者使用 [HOST:CONTAINER:ro] 这样的格式，后者对于容器来说，数据卷是只读的，这样可以有效保护宿主机的文件系统。</div><div class="line">Compose的数据卷指定路径可以是相对路径，使用 . 或者 .. 来指定相对目录。</div><div class="line">数据卷的格式可以是下面多种形式：</div></pre></td></tr></table></figure>
-<pre><code>volumes:
-  // 只是指定一个路径，Docker 会自动在创建一个数据卷（这个路径是容器内部的）。
-  - /var/lib/mysql
-
-  // 使用绝对路径挂载数据卷
-  - /opt/data:/var/lib/mysql
-
-  // 以 Compose 配置文件为中心的相对路径作为数据卷挂载到容器。
-  - ./cache:/tmp/cache
-
-  // 使用用户的相对路径（~/ 表示的目录是 /home/&lt;用户目录&gt;/ 或者 /root/）。
-  - ~/configs:/etc/configs/:ro
-
-  // 已经存在的命名的数据卷。
-  - datavolume:/var/lib/mysql
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">    </div><div class="line">      </div><div class="line">如果你不使用宿主机的路径，你可以指定一个volume_driver。</div><div class="line"></div><div class="line"></div><div class="line">## volumes_from</div><div class="line"></div><div class="line">从其它容器或者服务挂载数据卷，可选的参数是 :ro或者 :rw，前者表示容器只读，后者表示容器对数据卷是可读可写的。默认情况下是可读可写的。</div></pre></td></tr></table></figure>
-<pre><code>volumes_from:
-  - service_name
-  - service_name:ro
-  - container:container_name
-  - container:container_name:rw
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">## cap_add, cap_drop</div><div class="line"></div><div class="line">添加或删除容器的内核功能。</div></pre></td></tr></table></figure>
-<pre><code>cap_add:
-  - ALL
-
-cap_drop:
-  - NET_ADMIN
-  - SYS_ADMIN
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">## cgroup_parent</div><div class="line"></div><div class="line">指定一个容器的父级cgroup。</div><div class="line"></div><div class="line">    cgroup_parent: m-executor-abcd</div><div class="line">    </div><div class="line">## devices</div><div class="line"></div><div class="line">设备映射列表。与Docker client的--device参数类似。</div></pre></td></tr></table></figure>
-<pre><code>devices:
-  - &quot;/dev/ttyUSB0:/dev/ttyUSB0&quot;
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">## extends</div><div class="line"></div><div class="line">这个标签可以扩展另一个服务，扩展内容可以是来自在当前文件，也可以是来自其他文件，相同服务的情况下，后来者会有选择地覆盖原有配置。</div></pre></td></tr></table></figure>
-<pre><code>extends:
-  file: common.yml
-  service: webapp
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">用户可以在任何地方使用这个标签，只要标签内容包含file和service两个值就可以了。file的值可以是相对或者绝对路径，如果不指定file的值，那么Compose会读取当前YML文件的信息。</div><div class="line"></div><div class="line">## network_mode</div><div class="line"></div><div class="line">网络模式，与Docker client的--net参数类似，只是相对多了一个service:[service name] 的格式。</div><div class="line">例如：</div></pre></td></tr></table></figure>
-<pre><code>network_mode: &quot;bridge&quot;
-network_mode: &quot;host&quot;
-network_mode: &quot;none&quot;
-network_mode: &quot;service:[service name]&quot;
-network_mode: &quot;container:[container name/id]&quot;
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">   </div><div class="line">可以指定使用服务或者容器的网络。</div><div class="line"></div><div class="line">## networks</div><div class="line"></div><div class="line">加入指定网络，格式如下：</div></pre></td></tr></table></figure>
-<pre><code>services:
-  some-service:
-    networks:
-     - some-network
-     - other-network
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">        </div><div class="line">关于这个标签还有一个特别的子标签aliases，这是一个用来设置服务别名的标签，例如：</div></pre></td></tr></table></figure>
-<pre><code>services:
-  some-service:
-    networks:
-      some-network:
-        aliases:
-         - alias1
-         - alias3
-      other-network:
-        aliases:
-         - alias2
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">相同的服务可以在不同的网络有不同的别名。</div><div class="line"></div><div class="line"></div><div class="line">## 其它</div><div class="line"></div><div class="line">还有这些标签：cpu_shares, cpu_quota, cpuset, domainname, hostname, ipc, mac_address, mem_limit, memswap_limit, privileged, read_only, restart, shm_size, stdin_open, tty, user, working_dir</div><div class="line">上面这些都是一个单值的标签，类似于使用docker run的效果。</div></pre></td></tr></table></figure>
-<pre><code>cpu_shares: 73
-cpu_quota: 50000
-cpuset: 0,1
-
-user: postgresql
-working_dir: /code
-
-domainname: foo.com
-hostname: foo
-ipc: host
-mac_address: 02:42:ac:11:65:43
-
-mem_limit: 1000000000
-memswap_limit: 2000000000
-privileged: true
-
-restart: always
-
-read_only: true
-shm_size: 64M
-stdin_open: true
-tty: true
-</code></pre><p>```</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">extra_hosts:</div><div class="line"> - &quot;somehost:162.242.195.82&quot;</div><div class="line"> - &quot;otherhost:50.31.209.229&quot;</div></pre></td></tr></table></figure>
+<p>启动之后查看容器内部hosts： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">162.242.195.82  somehost</div><div class="line">50.31.209.229   otherhost</div></pre></td></tr></table></figure>
+<h2 id="labels"><a href="#labels" class="headerlink" title="labels"></a>labels</h2><p>向容器添加元数据，和Dockerfile的LABEL指令一个意思，格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">labels:</div><div class="line">   com.example.description: &quot;Accounting webapp&quot;</div><div class="line">   com.example.department: &quot;Finance&quot;</div><div class="line">   com.example.label-with-empty-value: &quot;&quot;</div><div class="line"> labels:</div><div class="line">   - &quot;com.example.description=Accounting webapp&quot;</div><div class="line">   - &quot;com.example.department=Finance&quot;</div><div class="line">   - &quot;com.example.label-with-empty-value&quot;</div></pre></td></tr></table></figure>
+<h2 id="links"><a href="#links" class="headerlink" title="links"></a>links</h2><p>还记得上面的depends_on吧，那个标签解决的是启动顺序问题，这个标签解决的是容器连接问题，与Docker client的–link一样效果，会连接到其它服务中的容器。<br>格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">links:</div><div class="line"> - db</div><div class="line"> - db:database</div><div class="line"> - redis</div></pre></td></tr></table></figure>
+<p>使用的别名将会自动在服务容器中的/etc/hosts里创建。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">172.12.2.186  db</div><div class="line">172.12.2.186  database</div><div class="line">172.12.2.187  redis</div></pre></td></tr></table></figure>
+<p>相应的环境变量也将被创建。</p>
+<h2 id="logging"><a href="#logging" class="headerlink" title="logging"></a>logging</h2><p>这个标签用于配置日志服务。格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">logging:</div><div class="line">  driver: syslog</div><div class="line">  options:</div><div class="line">    syslog-address: &quot;tcp://192.168.0.42:123&quot;</div></pre></td></tr></table></figure>
+<p>默认的driver是json-file。只有json-file和journald可以通过docker-compose logs显示日志，其他方式有其他日志查看方式，但目前Compose不支持。对于可选值可以使用options指定。</p>
+<h2 id="pid"><a href="#pid" class="headerlink" title="pid"></a>pid</h2><pre><code>pid: &quot;host&quot;
+</code></pre><p>将PID模式设置为主机PID模式，跟主机系统共享进程命名空间。容器使用这个标签将能够访问和操纵其他容器和宿主机的名称空间。</p>
+<h2 id="ports"><a href="#ports" class="headerlink" title="ports"></a>ports</h2><p>映射端口的标签。<br>使用HOST:CONTAINER格式或者只是指定容器的端口，宿主机会随机映射端口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ports:</div><div class="line"> - &quot;3000&quot;</div><div class="line"> - &quot;8000:8000&quot;</div><div class="line"> - &quot;49100:22&quot;</div><div class="line"> - &quot;127.0.0.1:8001:8001&quot;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：当使用HOST:CONTAINER格式来映射端口时，如果你使用的容器端口小于60你可能会得到错误得结果，因为YAML将会解析xx:yy这种数字格式为60进制。<br>所以建议采用字符串格式。</p>
+</blockquote>
+<h2 id="security-opt"><a href="#security-opt" class="headerlink" title="security_opt"></a>security_opt</h2><p>为每个容器覆盖默认的标签。简单说来就是管理全部服务的标签。比如设置全部服务的user标签值为USER。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">security_opt:</div><div class="line">  - label:user:USER</div><div class="line">  - label:role:ROLE</div></pre></td></tr></table></figure>
+<h2 id="stop-signal"><a href="#stop-signal" class="headerlink" title="stop_signal"></a>stop_signal</h2><p>设置另一个信号来停止容器。在默认情况下使用的是SIGTERM停止容器。设置另一个信号可以使用stop_signal标签。</p>
+<pre><code>stop_signal: SIGUSR1
+</code></pre><h2 id="volumes"><a href="#volumes" class="headerlink" title="volumes"></a>volumes</h2><p>挂载一个目录或者一个已存在的数据卷容器，可以直接使用 [HOST:CONTAINER] 这样的格式，或者使用 [HOST:CONTAINER:ro] 这样的格式，后者对于容器来说，数据卷是只读的，这样可以有效保护宿主机的文件系统。<br>Compose的数据卷指定路径可以是相对路径，使用 . 或者 .. 来指定相对目录。<br>数据卷的格式可以是下面多种形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">volumes:</div><div class="line">  // 只是指定一个路径，Docker 会自动在创建一个数据卷（这个路径是容器内部的）。</div><div class="line">  - /var/lib/mysql</div><div class="line"></div><div class="line">  // 使用绝对路径挂载数据卷</div><div class="line">  - /opt/data:/var/lib/mysql</div><div class="line"></div><div class="line">  // 以 Compose 配置文件为中心的相对路径作为数据卷挂载到容器。</div><div class="line">  - ./cache:/tmp/cache</div><div class="line"></div><div class="line">  // 使用用户的相对路径（~/ 表示的目录是 /home/&lt;用户目录&gt;/ 或者 /root/）。</div><div class="line">  - ~/configs:/etc/configs/:ro</div><div class="line"></div><div class="line">  // 已经存在的命名的数据卷。</div><div class="line">  - datavolume:/var/lib/mysql</div></pre></td></tr></table></figure>
+<p>如果你不使用宿主机的路径，你可以指定一个volume_driver。</p>
+<h2 id="volumes-from"><a href="#volumes-from" class="headerlink" title="volumes_from"></a>volumes_from</h2><p>从其它容器或者服务挂载数据卷，可选的参数是 :ro或者 :rw，前者表示容器只读，后者表示容器对数据卷是可读可写的。默认情况下是可读可写的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">volumes_from:</div><div class="line">  - service_name</div><div class="line">  - service_name:ro</div><div class="line">  - container:container_name</div><div class="line">  - container:container_name:rw</div></pre></td></tr></table></figure>
+<h2 id="cap-add-cap-drop"><a href="#cap-add-cap-drop" class="headerlink" title="cap_add, cap_drop"></a>cap_add, cap_drop</h2><p>添加或删除容器的内核功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">cap_add:</div><div class="line">  - ALL</div><div class="line"></div><div class="line">cap_drop:</div><div class="line">  - NET_ADMIN</div><div class="line">  - SYS_ADMIN</div></pre></td></tr></table></figure>
+<h2 id="cgroup-parent"><a href="#cgroup-parent" class="headerlink" title="cgroup_parent"></a>cgroup_parent</h2><p>指定一个容器的父级cgroup。</p>
+<pre><code>cgroup_parent: m-executor-abcd
+</code></pre><h2 id="devices"><a href="#devices" class="headerlink" title="devices"></a>devices</h2><p>设备映射列表。与Docker client的–device参数类似。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">devices:</div><div class="line">  - &quot;/dev/ttyUSB0:/dev/ttyUSB0&quot;</div></pre></td></tr></table></figure>
+<h2 id="extends"><a href="#extends" class="headerlink" title="extends"></a>extends</h2><p>这个标签可以扩展另一个服务，扩展内容可以是来自在当前文件，也可以是来自其他文件，相同服务的情况下，后来者会有选择地覆盖原有配置。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">extends:</div><div class="line">  file: common.yml</div><div class="line">  service: webapp</div></pre></td></tr></table></figure>
+<p>用户可以在任何地方使用这个标签，只要标签内容包含file和service两个值就可以了。file的值可以是相对或者绝对路径，如果不指定file的值，那么Compose会读取当前YML文件的信息。</p>
+<h2 id="network-mode"><a href="#network-mode" class="headerlink" title="network_mode"></a>network_mode</h2><p>网络模式，与Docker client的–net参数类似，只是相对多了一个service:[service name] 的格式。<br>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">network_mode: &quot;bridge&quot;</div><div class="line">network_mode: &quot;host&quot;</div><div class="line">network_mode: &quot;none&quot;</div><div class="line">network_mode: &quot;service:[service name]&quot;</div><div class="line">network_mode: &quot;container:[container name/id]&quot;</div></pre></td></tr></table></figure>
+<p>可以指定使用服务或者容器的网络。</p>
+<h2 id="networks"><a href="#networks" class="headerlink" title="networks"></a>networks</h2><p>加入指定网络，格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">services:</div><div class="line">  some-service:</div><div class="line">    networks:</div><div class="line">     - some-network</div><div class="line">     - other-network</div></pre></td></tr></table></figure>
+<p>关于这个标签还有一个特别的子标签aliases，这是一个用来设置服务别名的标签，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">services:</div><div class="line">  some-service:</div><div class="line">    networks:</div><div class="line">      some-network:</div><div class="line">        aliases:</div><div class="line">         - alias1</div><div class="line">         - alias3</div><div class="line">      other-network:</div><div class="line">        aliases:</div><div class="line">         - alias2</div></pre></td></tr></table></figure>
+<p>相同的服务可以在不同的网络有不同的别名。</p>
+<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><p>还有这些标签：cpu_shares, cpu_quota, cpuset, domainname, hostname, ipc, mac_address, mem_limit, memswap_limit, privileged, read_only, restart, shm_size, stdin_open, tty, user, working_dir<br>上面这些都是一个单值的标签，类似于使用docker run的效果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">cpu_shares: 73</div><div class="line">cpu_quota: 50000</div><div class="line">cpuset: 0,1</div><div class="line"></div><div class="line">user: postgresql</div><div class="line">working_dir: /code</div><div class="line"></div><div class="line">domainname: foo.com</div><div class="line">hostname: foo</div><div class="line">ipc: host</div><div class="line">mac_address: 02:42:ac:11:65:43</div><div class="line"></div><div class="line">mem_limit: 1000000000</div><div class="line">memswap_limit: 2000000000</div><div class="line">privileged: true</div><div class="line"></div><div class="line">restart: always</div><div class="line"></div><div class="line">read_only: true</div><div class="line">shm_size: 64M</div><div class="line">stdin_open: true</div><div class="line">tty: true</div></pre></td></tr></table></figure>
 ]]></content>
       
         <categories>
