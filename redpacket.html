@@ -30,6 +30,14 @@
                     return false;
                 }
             }
+            function is_qq() {
+                var ua = navigator.userAgent.toLowerCase();
+                if (ua.match(/QQ/i) == "qq") {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
             function userAgent() {
                 var output = {};
                 if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
@@ -57,7 +65,8 @@
                 }
             }
             var isWeixin = is_weixin();
-            if(isWeixin){
+            var isQQ = is_qq();
+            if(isWeixin || isQQ){
                 $(".weixin-tip").css("height",winHeight);
                 $(".weixin-tip").show();
             } else {
