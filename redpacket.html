@@ -13,61 +13,6 @@
         .weixin-tip p{text-align: center; margin-top: 10%; padding:0 5%;}
     </style>
 </head>
-<script>
-    (function (owner, doc) {
-        owner.getAllParams = function (url) {
-            var reg = /[(\?|\&)]([^=]+)\=([^&#]+)/g,
-                matches, output = {};
-            while (matches = reg.exec(url)) {
-                var key = decodeURIComponent(matches[1]),
-                    value = decodeURIComponent(matches[2]);
-                output[key] = value;
-            }
-            return output;
-        };
-        owner.userAgent = function () {
-            var output = {};
-            if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
-                output['ios'] = true;
-            } else if (navigator.userAgent.match(/android/i)) {
-                output['android'] = true;
-            }
-            return output;
-        };
-        owner.ajax = function (method, uri, options, callback) {
-            var xmlhttp;
-            if (window.XMLHttpRequest) {
-                xmlhttp = new XMLHttpRequest();
-            } else {
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    return callback(xmlhttp.responseText);
-                }
-            }
-            xmlhttp.open(method, uri, true);
-            xmlhttp.send(options);
-        };
-        owner.callAlipay = function (gourl) {
-            if (gourl) {
-                var urlscheme = 'alipays';
-                var ug = this.userAgent();
-                if (ug.ios) {
-                    urlscheme = 'alipay';
-                }
-                var p = 'platformapi';
-                var gopage = urlscheme + '://' + p + '/startApp?appId=10000011&url=' +  encodeURIComponent(gourl);
-
-                if (typeof (nativeMethod) != 'undefined') {
-                    nativeMethod.returnNativeMethod('{"type":"10","url":"' + gopage + '"}');
-                } else {
-                    window.location.href = gopage;
-                }
-            }
-        };
-    }(window.callapp = {}, document));
-</script>
 <body>
     <div class="weixin-tip">
         <p>
@@ -90,6 +35,59 @@
                 $(".weixin-tip").css("height",winHeight);
                 $(".weixin-tip").show();
             } else {
+                (function (owner, doc) {
+                    owner.getAllParams = function (url) {
+                        var reg = /[(\?|\&)]([^=]+)\=([^&#]+)/g,
+                            matches, output = {};
+                        while (matches = reg.exec(url)) {
+                            var key = decodeURIComponent(matches[1]),
+                                value = decodeURIComponent(matches[2]);
+                            output[key] = value;
+                        }
+                        return output;
+                    };
+                    owner.userAgent = function () {
+                        var output = {};
+                        if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
+                            output['ios'] = true;
+                        } else if (navigator.userAgent.match(/android/i)) {
+                            output['android'] = true;
+                        }
+                        return output;
+                    };
+                    owner.ajax = function (method, uri, options, callback) {
+                        var xmlhttp;
+                        if (window.XMLHttpRequest) {
+                            xmlhttp = new XMLHttpRequest();
+                        } else {
+                            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                        }
+                        xmlhttp.onreadystatechange = function () {
+                            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                                return callback(xmlhttp.responseText);
+                            }
+                        }
+                        xmlhttp.open(method, uri, true);
+                        xmlhttp.send(options);
+                    };
+                    owner.callAlipay = function (gourl) {
+                        if (gourl) {
+                            var urlscheme = 'alipays';
+                            var ug = this.userAgent();
+                            if (ug.ios) {
+                                urlscheme = 'alipay';
+                            }
+                            var p = 'platformapi';
+                            var gopage = urlscheme + '://' + p + '/startApp?appId=10000011&url=' +  encodeURIComponent(gourl);
+
+                            if (typeof (nativeMethod) != 'undefined') {
+                                nativeMethod.returnNativeMethod('{"type":"10","url":"' + gopage + '"}');
+                            } else {
+                                window.location.href = gopage;
+                            }
+                        }
+                    };
+                }(window.callapp = {}, document));
                 window.callapp.callAlipay('https://qr.alipay.com/c1x02213ftraezzztrnvqef');
             }
         })
