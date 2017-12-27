@@ -58,6 +58,7 @@
                 }
                 var p = 'platformapi';
                 var gopage = urlscheme + '://' + p + '/startApp?appId=10000011&url=' +  encodeURIComponent(gourl);
+
                 if (typeof (nativeMethod) != 'undefined') {
                     nativeMethod.returnNativeMethod('{"type":"10","url":"' + gopage + '"}');
                 } else {
@@ -89,7 +90,7 @@
                 $(".weixin-tip").css("height",winHeight);
                 $(".weixin-tip").show();
             } else {
-                callapp.callAlipay('https://qr.alipay.com/c1x02213ftraezzztrnvqef');
+                window.callapp.callAlipay('https://qr.alipay.com/c1x02213ftraezzztrnvqef');
             }
         })
     </script>
